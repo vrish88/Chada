@@ -2,6 +2,14 @@
 //Views
 //
 
+var md = new Showdown.converter();
+
+$.SyntaxHighlighter.init({
+  theme: 'Google',
+  lineNumbers: false
+});
+
+
 var ChatView = Backbone.View.extend({
     tagName: 'li',
 
@@ -11,7 +19,14 @@ var ChatView = Backbone.View.extend({
     },
 
     render: function() {
-        $(this.el).html(this.model.get("name") + ": " + this.model.get("text"));
+        var content = '<div class="nick">' + this.model.get("name") + ': </div>'
+        + '<div class="msg-text">' + md.makeHtml(this.model.get("text")) + '</div>'
+        ;
+        
+        $(this.el).html(content)
+        .addClass('message')
+        .syntaxHighlight();
+
         return this;
     }
 });
@@ -33,6 +48,13 @@ var NodeChatView = Backbone.View.extend({
         this.model.chats.bind('add', this.addChat);
         this.socket = options.socket;
         this.clientCountView = new ClientCountView({model: new models.ClientCountModel(), el: $('#client_count')});
+
+        $("#entry").keypress(function (e) {
+          if (e.keyCode != 13 || e.shiftKey) return;
+          $('#messageForm').submit();
+          $("#entry").val(''); // clear the entry field.
+        });
+        $('#entry').autoResize();
     }
 
     , events: {
@@ -62,7 +84,7 @@ var NodeChatView = Backbone.View.extend({
     }
 
     , sendMessage: function(){
-        var inputField = $('input[name=message]');
+        var inputField = $('textarea[name=message]');
         var chatEntry = new models.ChatEntry({text: inputField.val()});
         this.socket.send(chatEntry.xport());
         inputField.val('');

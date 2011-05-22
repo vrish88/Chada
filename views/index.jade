@@ -30,21 +30,19 @@ html(lang="en")
     #heading
       h1 nodechat
     #content
-      p 
-        | connected clients
-        span#client_count 0
-      p 
-        a(href='/logout') logout
-
       p
-        label You are logged in as: 
-          = locals.name 
-      p
-        | Fun Chat Messages
         ul#chat_list
           
       form(method="post", action="#", onsubmit="return false")#messageForm
-        p
-          label Message:
-            input(type='text', name='message')
-            input(type='submit', value='send')
+        div#toolbar
+          ul#status
+            li
+              label You are: 
+                = locals.name 
+            li
+              | users 
+              span#client_count 0
+            li
+              a(href='/logout') logout
+              
+          textarea(name='message', id='entry')
