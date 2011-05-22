@@ -52,7 +52,6 @@ var NodeChatView = Backbone.View.extend({
         $("#entry").keypress(function (e) {
           if (e.keyCode != 13 || e.shiftKey) return;
           $('#messageForm').submit();
-          $("#entry").val(''); // clear the entry field.
         });
         $('#entry').autoResize();
     }
@@ -75,6 +74,7 @@ var NodeChatView = Backbone.View.extend({
                 var newChatEntry = new models.ChatEntry();
                 newChatEntry.mport(message.data);
                 this.model.chats.add(newChatEntry);
+                this.scrollDown();
                 break;
             case 'update':
                 log('count received' + message.data);
@@ -88,5 +88,10 @@ var NodeChatView = Backbone.View.extend({
         var chatEntry = new models.ChatEntry({text: inputField.val()});
         this.socket.send(chatEntry.xport());
         inputField.val('');
+    }
+
+    , scrollDown: function() {
+        window.scrollBy(0, 100000000000000000);
+        $("#entry").focus();
     }
 });
