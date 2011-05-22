@@ -199,6 +199,19 @@ function chatMessage(client, socket, msg) {
 socket.on('connection', function (client) {
     var clientPurgatory = purgatory();
 
+    // get the last 20 messages
+    rc.lrange(['chatentries', -20, -1], function(err, replies) {
+        _.each(replies, function(reply) {
+            var chat = new models.ChatEntry();
+            chat.mport(reply);
+            console.log(chat);
+            client.send({
+                event: 'chat',
+                data: chat.xport()
+            });
+        })
+    }, redis.print);
+    
     client.on('message', function(message) {
         if (clientPurgatory.stillInPurgatory()) {
             if(message.event === 'clientauthrequest') {
