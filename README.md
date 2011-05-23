@@ -1,6 +1,6 @@
 Chada
 =====
-A chat application that uses [jslatts's][https://github.com/jslatts] [nodechat-tutorial][https://github.com/jslatts/nodechat-tutorial] as the basis for the project.
+A chat application that uses [jslatts's](https://github.com/jslatts) [nodechat-tutorial](https://github.com/jslatts/nodechat-tutorial) as the basis for the project.
 
 Todo
 ====
